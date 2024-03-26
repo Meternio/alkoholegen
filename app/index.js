@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import LoginScreen from './login/loginScreen';
+import LoginScreen from './login';
 import { auth } from '../firebaseConfig';
 import { onAuthStateChanged } from "firebase/auth";
 

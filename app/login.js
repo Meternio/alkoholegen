@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Image,
-  Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -96,7 +95,9 @@ export default function LoginScreen() {
           style={styles.scrollView}
         >
           <Image source={logo} style={styles.image} resizeMode="contain" />
-          <Animated.View style={{ ...styles.animationContainer, opacity: fadeAnim }}>
+          <Animated.View
+            style={{ ...styles.animationContainer, opacity: fadeAnim }}
+          >
             <Text style={styles.title}>
               {
                 {
@@ -155,28 +156,42 @@ export default function LoginScreen() {
 
             <View style={styles.otherOptionsView}>
               {mode !== "signup" ? (
-                <Text style={styles.footerText}>
-                  Don't Have Account?
-                  <Pressable style={styles.pressable} onPress={() => changeMode("signup")}>
-                    <Text style={styles.signup}> Sign Up</Text>
-                  </Pressable>
-                </Text>
+                <View style={styles.footerText}>
+                  <Text style={styles.button}>Don't Have Account?</Text>
+                  <Button
+                    labelStyle={styles.button}
+                    mode="text"
+                    onPress={() => changeMode("signup")}
+                  >
+                    Sign Up
+                  </Button>
+                </View>
               ) : (
-                <Text style={styles.footerText}>
-                  Already Have Account?
-                  <Pressable style={styles.pressable} onPress={() => changeMode("login")}>
-                    <Text style={styles.signup}> Login</Text>
-                  </Pressable>
-                </Text>
+                <View style={styles.footerText}>
+                  <Text style={styles.button}>Already Have Account?</Text>
+                  <Button
+                    labelStyle={styles.button}
+                    mode="text"
+                    onPress={() => changeMode("login")}
+                  >
+                    Login
+                  </Button>
+                </View>
               )}
               {mode !== "forgot" ? (
-                <Pressable style={styles.pressable} onPress={() => changeMode("forgot")}>
-                  <Text style={styles.forgetText}>Forgot Password?</Text>
-                </Pressable>
+                <Button
+                  labelStyle={styles.button}
+                  onPress={() => changeMode("forgot")}
+                >
+                  Forgot Password?
+                </Button>
               ) : (
-                <Pressable style={styles.pressable} onPress={() => changeMode("login")}>
-                  <Text style={styles.forgetText}>Back to Login</Text>
-                </Pressable>
+                <Button
+                  labelStyle={styles.button}
+                  onPress={() => changeMode("login")}
+                >
+                  Back to Login
+                </Button>
               )}
             </View>
           </Animated.View>
@@ -206,9 +221,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexGrow: 1,
     width: "100%",
-  },
-  animationContainer: {
-    
   },
   scrollViewContainer: {
     alignSelf: "center",
@@ -243,10 +255,6 @@ const styles = StyleSheet.create({
   input: {
     marginTop: -8,
   },
-  forgetText: {
-    color: "#65120c",
-    fontSize: 16,
-  },
   button: {
     fontSize: 16,
   },
@@ -257,10 +265,11 @@ const styles = StyleSheet.create({
   footerText: {
     textAlign: "center",
     fontSize: 16,
-  },
-  signup: {
-    color: "#65120c",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     fontSize: 16,
+    gap: 5,
   },
   otherOptionsView: {
     flexDirection: "column",
@@ -269,10 +278,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     marginBottom: -5,
-  },
-  pressable: {
-    padding: 5,
-    fontSize: 16,
   },
   snackbar: {
     backgroundColor: "#65120c",

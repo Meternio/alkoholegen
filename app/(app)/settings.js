@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
-export default function Home() {
+export default function Settings() {
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>

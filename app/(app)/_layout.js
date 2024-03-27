@@ -1,12 +1,13 @@
-import { Slot, Redirect } from "expo-router";
-import React, { useState, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import { Slot, Redirect, router } from "expo-router";
+import { useState, useEffect } from "react";
+import { View, StyleSheet, Pressable } from "react-native";
 import {
   MD3LightTheme as DefaultTheme,
   PaperProvider,
   Appbar,
-  BottomNavigation,
   Text,
+  Button,
+  Icon,
 } from "react-native-paper";
 import { auth } from "../../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
@@ -20,49 +21,33 @@ const theme = {
   },
 };
 
-function handleSearch() {
-  console.log("Searching...");
-}
-
-function handleMore() {
-  console.log("Shown more...");
-}
-
-const MusicRoute = () => <Text>Music</Text>;
-
-const AlbumsRoute = () => <Text>Albums</Text>;
-
-const RecentsRoute = () => <Text>Recents</Text>;
-
-const NotificationsRoute = () => <Text>Notifications</Text>;
-
 export default function HomeLayout() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
+  const [currentRoute, setCurrentRoute] = useState(null);
+  const [routes] = useState([
     {
-      key: "music",
-      title: "Favorites",
+      key: "/",
+      title: "Home",
       focusedIcon: "heart",
       unfocusedIcon: "heart-outline",
     },
-    { key: "albums", title: "Albums", focusedIcon: "album" },
-    { key: "recents", title: "Recents", focusedIcon: "history" },
-    {
-      key: "notifications",
-      title: "Notifications",
-      focusedIcon: "bell",
-      unfocusedIcon: "bell-outline",
-    },
+    { key: "/settings", title: "Listen", focusedIcon: "album" },
   ]);
 
-  const renderScene = BottomNavigation.SceneMap({
-    music: MusicRoute,
-    albums: AlbumsRoute,
-    recents: RecentsRoute,
-    notifications: NotificationsRoute,
-  });
+  function handleSearch() {
+    console.log("Searching...");
+  }
+
+  function handleMore() {
+    console.log("Shown more...");
+  }
+
+  useEffect(() => {
+    if (!currentRoute) return;
+
+    router.push(currentRoute);
+  }, [currentRoute]);
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -80,7 +65,11 @@ export default function HomeLayout() {
   }, []);
 
   if (loading) {
-    return <View style={styles.container}><Text style={styles.loading}>Loading...</Text></View>;
+    return (
+      <View style={styles.container}>
+        <Text style={styles.loading}>Loading...</Text>
+      </View>
+    );
   }
 
   if (!loggedIn) {
@@ -95,11 +84,31 @@ export default function HomeLayout() {
         <Appbar.Action icon="dots-vertical" onPress={handleMore} />
       </Appbar.Header>
       <Slot />
-      <BottomNavigation
-        navigationState={{ index, routes }}
-        onIndexChange={setIndex}
-        renderScene={renderScene}
-      />
+      <Appbar style={styles.bottomBar}>
+        {routes.map((route, i) => (
+          <Pressable
+            key={i}
+            style={styles.bottomBarItem}
+            mode="text"
+            background="transparent"
+            onPress={() => setCurrentRoute(route.key)}
+          >
+            <View style={{...styles.bottomBarItemIconWrapper, backgroundColor: (currentRoute === route.key) || (!currentRoute && i === 0) ? "rgba(101, 18, 12, 0.06)" : "transparent"}}>
+              <Icon
+                source={
+                  currentRoute === route.key || (!currentRoute && i === 0)
+                    ? route.focusedIcon
+                    : route.unfocusedIcon
+                    ? route.unfocusedIcon
+                    : route.focusedIcon
+                }
+                size={20}
+              />
+            </View>
+            <Text>Press me</Text>
+          </Pressable>
+        ))}
+      </Appbar>
     </PaperProvider>
   );
 }
@@ -112,5 +121,25 @@ const styles = StyleSheet.create({
   },
   loading: {
     fontSize: 16,
+  },
+  bottomBar: {
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+    height: 80,
+  },
+  bottomBarItem: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 5,
+  },
+  bottomBarItemIconWrapper: {
+    padding: 5,
+    borderRadius: 100,
+    width: "100%",
+    minWidth: 60,
+    alignItems: "center",
   },
 });

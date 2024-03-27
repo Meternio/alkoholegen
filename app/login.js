@@ -89,14 +89,14 @@ export default function LoginScreen() {
   const onDismissSnackBar = () => setNotification(null);
 
   return (
-    <>
+    <View style={styles.containerWrapper}>
       <SafeAreaView style={styles.container}>
         <ScrollView
           contentContainerStyle={styles.scrollViewContainer}
           style={styles.scrollView}
         >
           <Image source={logo} style={styles.image} resizeMode="contain" />
-          <Animated.View style={{ ...styles.container, opacity: fadeAnim }}>
+          <Animated.View style={{ ...styles.animationContainer, opacity: fadeAnim }}>
             <Text style={styles.title}>
               {
                 {
@@ -134,6 +134,7 @@ export default function LoginScreen() {
                 onPress={handleSubmit}
                 loading={loading}
                 disabled={loading}
+                labelStyle={styles.button}
                 icon={
                   {
                     login: "login",
@@ -156,24 +157,24 @@ export default function LoginScreen() {
               {mode !== "signup" ? (
                 <Text style={styles.footerText}>
                   Don't Have Account?
-                  <Pressable onPress={() => changeMode("signup")}>
+                  <Pressable style={styles.pressable} onPress={() => changeMode("signup")}>
                     <Text style={styles.signup}> Sign Up</Text>
                   </Pressable>
                 </Text>
               ) : (
                 <Text style={styles.footerText}>
                   Already Have Account?
-                  <Pressable onPress={() => changeMode("login")}>
+                  <Pressable style={styles.pressable} onPress={() => changeMode("login")}>
                     <Text style={styles.signup}> Login</Text>
                   </Pressable>
                 </Text>
               )}
               {mode !== "forgot" ? (
-                <Pressable onPress={() => changeMode("forgot")}>
+                <Pressable style={styles.pressable} onPress={() => changeMode("forgot")}>
                   <Text style={styles.forgetText}>Forgot Password?</Text>
                 </Pressable>
               ) : (
-                <Pressable onPress={() => changeMode("login")}>
+                <Pressable style={styles.pressable} onPress={() => changeMode("login")}>
                   <Text style={styles.forgetText}>Back to Login</Text>
                 </Pressable>
               )}
@@ -188,27 +189,43 @@ export default function LoginScreen() {
       >
         {notification}
       </Snackbar>
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  containerWrapper: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    flexGrow: 1,
+    width: "100%",
+  },
+  animationContainer: {
+    
   },
   scrollViewContainer: {
+    alignSelf: "center",
+    flexGrow: 1,
+    justifyContent: "center",
     width: "100%",
-    maxWidth: 600,
-    margin: "auto",
   },
   scrollView: {
     padding: 20,
+    width: "100%",
+    maxWidth: 600,
   },
   image: {
     height: 280,
     width: 280,
     borderRadius: 7,
-    margin: "auto",
+    alignSelf: "center",
   },
   title: {
     fontSize: 30,
@@ -228,6 +245,10 @@ const styles = StyleSheet.create({
   },
   forgetText: {
     color: "#65120c",
+    fontSize: 16,
+  },
+  button: {
+    fontSize: 16,
   },
   buttonView: {
     width: "100%",
@@ -235,25 +256,30 @@ const styles = StyleSheet.create({
   },
   footerText: {
     textAlign: "center",
+    fontSize: 16,
   },
   signup: {
     color: "#65120c",
+    fontSize: 16,
   },
   otherOptionsView: {
     flexDirection: "column",
-    justifyContent: "space-between",
     alignItems: "center",
-    gap: 10,
-    flexWrap: "wrap",
-    width: "100%",
+    gap: 5,
     marginTop: 10,
+    fontSize: 16,
+    marginBottom: -5,
+  },
+  pressable: {
+    padding: 5,
+    fontSize: 16,
   },
   snackbar: {
     backgroundColor: "#65120c",
     textAlign: "center",
     maxWidth: "600px",
-    margin: "auto",
-    width: "calc(100% - 40px)",
-    bottom: 20,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    alignSelf: "center",
   },
 });

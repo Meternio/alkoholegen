@@ -3,12 +3,12 @@ import {
   Image,
   SafeAreaView,
   StyleSheet,
-  Text,
   View,
   ScrollView,
   Animated,
 } from "react-native";
-import { Button, TextInput, Snackbar } from "react-native-paper";
+import { router } from "expo-router";
+import { Button, TextInput, Snackbar, Text } from "react-native-paper";
 import logo from "../assets/icon.png";
 import { auth } from "../firebaseConfig";
 import {
@@ -58,6 +58,7 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, username, password);
+      router.replace('/');
     } catch (error) {
       setNotification(error.message + " Invalid email or password");
     } finally {
@@ -68,6 +69,7 @@ export default function LoginScreen() {
   const handleSignUp = async () => {
     try {
       await createUserWithEmailAndPassword(auth, username, password);
+      router.replace('/');
     } catch (error) {
       setNotification(error.message + " Invalid email or password");
     } finally {
@@ -257,6 +259,7 @@ const styles = StyleSheet.create({
   },
   button: {
     fontSize: 16,
+    lineHeight: 20,
   },
   buttonView: {
     width: "100%",

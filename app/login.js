@@ -75,7 +75,15 @@ export default function LoginScreen() {
           style={styles.scrollView}
         >
           <Image source={logo} style={styles.image} resizeMode="contain" />
-          <Text style={styles.title}>Login</Text>
+          <Text style={styles.title}>
+            {
+              {
+                login: "Login",
+                signup: "Sign Up",
+                forgot: "Forgot Password",
+              }[mode]
+            }
+          </Text>
           <View style={styles.inputView}>
             <TextInput
               label="Email"
@@ -188,7 +196,6 @@ const styles = StyleSheet.create({
     marginTop: -8,
   },
   forgetText: {
-    fontSize: 13,
     color: "#65120c",
   },
   buttonView: {
@@ -197,11 +204,9 @@ const styles = StyleSheet.create({
   },
   footerText: {
     textAlign: "center",
-    color: "#65120c",
   },
   signup: {
     color: "#65120c",
-    fontSize: 13,
   },
   otherOptionsView: {
     flexDirection: "column",

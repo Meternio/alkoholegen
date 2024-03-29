@@ -130,7 +130,7 @@ export default function HomeLayout() {
                 size={20}
               />
             </Animated.View>
-            <Text>Press me</Text>
+            <Text>{route.title}</Text>
           </Pressable>
         ))}
       </Appbar>
@@ -158,6 +158,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    minWidth: 60,
     gap: 5,
   },
   bottomBarItemIconWrapper: {

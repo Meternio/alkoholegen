@@ -1,12 +1,13 @@
 import { Slot, Redirect, router } from "expo-router";
 import { useState, useEffect } from "react";
-import { View, StyleSheet, Pressable, Animated } from "react-native";
+import { View, StyleSheet, Pressable, Animated, ScrollView } from "react-native";
 import {
   MD3LightTheme as DefaultTheme,
   PaperProvider,
   Appbar,
   Text,
   Icon,
+  FAB,
 } from "react-native-paper";
 import { auth } from "../../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
@@ -43,7 +44,13 @@ export default function HomeLayout() {
     console.log("Shown more...");
   }
 
+  function handleAdd() {
+    console.log("Adding...");
+  }
+
   function handleRouteChange(route) {
+    if(currentRoute === route.key) return;
+
     width.setValue(0.5);
     setCurrentRoute(route.key)
   }
@@ -97,7 +104,14 @@ export default function HomeLayout() {
         <Appbar.Action icon="magnify" onPress={handleSearch} />
         <Appbar.Action icon="dots-vertical" onPress={handleMore} />
       </Appbar.Header>
-      <Slot />
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContainer}>
+        <Slot />
+      </ScrollView>
+      <FAB
+        icon="plus"
+        style={styles.fab}
+        onPress={handleAdd}
+      />
       <Appbar style={styles.bottomBar}>
         {routes.map((route, i) => (
           <Pressable
@@ -144,6 +158,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  scrollViewContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+    width: "100%",
+  },
+  scrollView: {
+    padding: 20,
+  },
   loading: {
     fontSize: 16,
   },
@@ -165,5 +187,10 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 100,
     alignItems: "center",
+  },
+  fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 100,
   },
 });

@@ -1,4 +1,5 @@
 import { Slot } from "expo-router";
+import { SafeAreaView, StyleSheet } from "react-native";
 import {
   MD3LightTheme as DefaultTheme,
   PaperProvider,
@@ -16,7 +17,15 @@ const theme = {
 export default function MainLayout() {
   return (
     <PaperProvider theme={theme}>
-      <Slot />
+      <SafeAreaView style={styles.safeAreaView}>
+        <Slot />
+      </SafeAreaView>
     </PaperProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  safeAreaView: {
+    flex: 1,
+  },
+});

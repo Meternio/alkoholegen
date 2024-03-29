@@ -1,16 +1,15 @@
 import { useState } from "react";
 import {
   Image,
-  SafeAreaView,
   StyleSheet,
   View,
-  ScrollView,
   Animated,
+  ScrollView,
 } from "react-native";
 import { router } from "expo-router";
 import { Button, TextInput, Snackbar, Text } from "react-native-paper";
-import logo from "../assets/icon.png";
-import { auth } from "../firebaseConfig";
+import logo from "../../assets/icon.png";
+import { auth } from "../../firebaseConfig";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -91,149 +90,141 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.containerWrapper}>
-      <SafeAreaView style={styles.container}>
-        <ScrollView
-          contentContainerStyle={styles.scrollViewContainer}
-          style={styles.scrollView}
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}
+          style={styles.scrollView}>
+        <Image source={logo} style={styles.image} resizeMode="contain" />
+        <Animated.View
+          style={{ ...styles.animationContainer, opacity: fadeAnim }}
         >
-          <Image source={logo} style={styles.image} resizeMode="contain" />
-          <Animated.View
-            style={{ ...styles.animationContainer, opacity: fadeAnim }}
-          >
-            <Text style={styles.title}>
+          <Text style={styles.title}>
+            {
+              {
+                login: "Login",
+                signup: "Sign Up",
+                forgot: "Forgot Password",
+              }[mode]
+            }
+          </Text>
+          <View style={styles.inputView}>
+            <TextInput
+              label="Email"
+              value={username}
+              onChangeText={setUsername}
+              onSubmitEditing={handleLogin}
+              mode="outlined"
+              style={styles.input}
+            />
+            {mode !== "forgot" && (
+              <TextInput
+                label="Password"
+                value={password}
+                onChangeText={setPassword}
+                onSubmitEditing={handleLogin}
+                mode="outlined"
+                secureTextEntry
+                style={styles.input}
+              />
+            )}
+          </View>
+
+          <View style={styles.buttonView}>
+            <Button
+              mode="contained"
+              onPress={handleSubmit}
+              loading={loading}
+              disabled={loading}
+              labelStyle={styles.button}
+              icon={
+                {
+                  login: "login",
+                  signup: "account-plus-outline",
+                  forgot: "lock-alert-outline",
+                }[mode]
+              }
+            >
               {
                 {
                   login: "Login",
                   signup: "Sign Up",
-                  forgot: "Forgot Password",
+                  forgot: "Reset Password",
                 }[mode]
               }
-            </Text>
-            <View style={styles.inputView}>
-              <TextInput
-                label="Email"
-                value={username}
-                onChangeText={setUsername}
-                onSubmitEditing={handleLogin}
-                mode="outlined"
-                style={styles.input}
-              />
-              {mode !== "forgot" && (
-                <TextInput
-                  label="Password"
-                  value={password}
-                  onChangeText={setPassword}
-                  onSubmitEditing={handleLogin}
-                  mode="outlined"
-                  secureTextEntry
-                  style={styles.input}
-                />
-              )}
-            </View>
+            </Button>
+          </View>
 
-            <View style={styles.buttonView}>
-              <Button
-                mode="contained"
-                onPress={handleSubmit}
-                loading={loading}
-                disabled={loading}
-                labelStyle={styles.button}
-                icon={
-                  {
-                    login: "login",
-                    signup: "account-plus-outline",
-                    forgot: "lock-alert-outline",
-                  }[mode]
-                }
-              >
-                {
-                  {
-                    login: "Login",
-                    signup: "Sign Up",
-                    forgot: "Reset Password",
-                  }[mode]
-                }
-              </Button>
-            </View>
-
-            <View style={styles.otherOptionsView}>
-              {mode !== "signup" ? (
-                <View style={styles.footerText}>
-                  <Text style={styles.button}>Don't Have Account?</Text>
-                  <Button
-                    labelStyle={styles.button}
-                    mode="text"
-                    onPress={() => changeMode("signup")}
-                  >
-                    Sign Up
-                  </Button>
-                </View>
-              ) : (
-                <View style={styles.footerText}>
-                  <Text style={styles.button}>Already Have Account?</Text>
-                  <Button
-                    labelStyle={styles.button}
-                    mode="text"
-                    onPress={() => changeMode("login")}
-                  >
-                    Login
-                  </Button>
-                </View>
-              )}
-              {mode !== "forgot" ? (
+          <View style={styles.otherOptionsView}>
+            {mode !== "signup" ? (
+              <View style={styles.footerText}>
+                <Text style={styles.button}>Don't Have Account?</Text>
                 <Button
                   labelStyle={styles.button}
-                  onPress={() => changeMode("forgot")}
+                  mode="text"
+                  onPress={() => changeMode("signup")}
                 >
-                  Forgot Password?
+                  Sign Up
                 </Button>
-              ) : (
+              </View>
+            ) : (
+              <View style={styles.footerText}>
+                <Text style={styles.button}>Already Have Account?</Text>
                 <Button
                   labelStyle={styles.button}
+                  mode="text"
                   onPress={() => changeMode("login")}
                 >
-                  Back to Login
+                  Login
                 </Button>
-              )}
-            </View>
-          </Animated.View>
-        </ScrollView>
-      </SafeAreaView>
+              </View>
+            )}
+            {mode !== "forgot" ? (
+              <Button
+                labelStyle={styles.button}
+                onPress={() => changeMode("forgot")}
+              >
+                Forgot Password?
+              </Button>
+            ) : (
+              <Button
+                labelStyle={styles.button}
+                onPress={() => changeMode("login")}
+              >
+                Back to Login
+              </Button>
+            )}
+          </View>
+        </Animated.View>
+      </ScrollView>
       <Snackbar
-        visible={notification}
-        onDismiss={onDismissSnackBar}
-        style={styles.snackbar}
-      >
-        {notification}
-      </Snackbar>
-    </View>
+      visible={notification}
+      onDismiss={onDismissSnackBar}
+      style={styles.snackbar}
+    >
+      {notification}
+    </Snackbar>
+  </View>
   );
 }
 
 const styles = StyleSheet.create({
   containerWrapper: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    flexGrow: 1,
-  },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    flexGrow: 1,
     width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   scrollViewContainer: {
     alignSelf: "center",
     flexGrow: 1,
     justifyContent: "center",
     width: "100%",
+    maxWidth: 600,
   },
   scrollView: {
     padding: 20,
     width: "100%",
-    maxWidth: 600,
+  },
+  animationContainer: {
+    width: "100%",
   },
   image: {
     height: 280,
@@ -286,8 +277,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#65120c",
     textAlign: "center",
     maxWidth: "600px",
-    marginHorizontal: 20,
-    marginBottom: 20,
     alignSelf: "center",
+    margin: 0,
+    bottom: 20,
+    marginHorizontal: 20,
   },
 });

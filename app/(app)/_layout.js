@@ -1,12 +1,11 @@
 import { Slot, Redirect, router } from "expo-router";
 import { useState, useEffect } from "react";
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable, Animated } from "react-native";
 import {
   MD3LightTheme as DefaultTheme,
   PaperProvider,
   Appbar,
   Text,
-  Button,
   Icon,
 } from "react-native-paper";
 import { auth } from "../../firebaseConfig";
@@ -34,6 +33,7 @@ export default function HomeLayout() {
     },
     { key: "/settings", title: "Listen", focusedIcon: "album" },
   ]);
+  const [width] = useState(new Animated.Value(1));
 
   function handleSearch() {
     console.log("Searching...");
@@ -43,9 +43,23 @@ export default function HomeLayout() {
     console.log("Shown more...");
   }
 
+  function handleRouteChange(route) {
+    width.setValue(0.5);
+    setCurrentRoute(route.key)
+  }
+
+  const animateWidthChange = () => {
+    Animated.timing(width, {
+      toValue: 1,
+      duration: 350,
+      useNativeDriver: false,
+    }).start();
+  };
+
   useEffect(() => {
     if (!currentRoute) return;
 
+    animateWidthChange();
     router.push(currentRoute);
   }, [currentRoute]);
 
@@ -91,9 +105,20 @@ export default function HomeLayout() {
             style={styles.bottomBarItem}
             mode="text"
             background="transparent"
-            onPress={() => setCurrentRoute(route.key)}
+            onPress={() => handleRouteChange(route)}
           >
-            <View style={{...styles.bottomBarItemIconWrapper, backgroundColor: (currentRoute === route.key) || (!currentRoute && i === 0) ? "rgba(101, 18, 12, 0.06)" : "transparent"}}>
+            <Animated.View
+              style={{
+                ...styles.bottomBarItemIconWrapper,
+                width: currentRoute === route.key || (!currentRoute && i === 0) ? width.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ['0%', '100%'],
+                }) : 40,
+                backgroundColor: currentRoute === route.key || (!currentRoute && i === 0)
+                  ? "rgba(101, 18, 12, 0.06)"
+                  : "transparent"
+              }}
+            >
               <Icon
                 source={
                   currentRoute === route.key || (!currentRoute && i === 0)
@@ -104,7 +129,7 @@ export default function HomeLayout() {
                 }
                 size={20}
               />
-            </View>
+            </Animated.View>
             <Text>Press me</Text>
           </Pressable>
         ))}
@@ -138,8 +163,6 @@ const styles = StyleSheet.create({
   bottomBarItemIconWrapper: {
     padding: 5,
     borderRadius: 100,
-    width: "100%",
-    minWidth: 60,
     alignItems: "center",
   },
 });

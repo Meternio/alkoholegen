@@ -19,7 +19,7 @@ import {
 
 export default function LoginScreen() {
   const [mode, setMode] = useState("login"); // ["login", "signup", "forgot"]
-  const [fadeAnim, setFadeAnim] = useState(new Animated.Value(1));
+  const [fadeAnim] = useState(new Animated.Value(1));
   const [notification, setNotification] = useState(null);
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");

@@ -32,7 +32,7 @@ export default function HomeLayout() {
       focusedIcon: "heart",
       unfocusedIcon: "heart-outline",
     },
-    { key: "/settings", title: "Listen", focusedIcon: "album" },
+    { key: "/profile", title: "Profile", focusedIcon: "album" },
   ]);
   const [width] = useState(new Animated.Value(1));
 
